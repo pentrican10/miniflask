@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Explore Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        p {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Explore Page!</h1>
+    <p>This is where you can explore more content.</p>
+    <button id="popupButton">Click Me for a Popup</button>
+    <script>
+        document.getElementById("popupButton").addEventListener("click", function () {
+            alert("Hello!");
+        });
+    </script>
+    <br><br>
+    <a href="{{ url_for('home') }}">Go Back to Home</a>
+</body>
+</html>
