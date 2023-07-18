@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Input Display Web App</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Input Display Web App</h1>
+    <div id="displayArea">
+      {% for entry in file_content %}
+      <p>{{ entry }}</p>
+      {% endfor %}
+    </div>
+    <a href="{{ url_for('index') }}">Enter New Text</a>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

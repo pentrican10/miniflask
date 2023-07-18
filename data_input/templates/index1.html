@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Resizable Textbox</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+        <div class="textarea-container">
+            <textarea id="myTextarea" oninput="resizeTextarea()"></textarea>
+        </div>
+
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
+</html>

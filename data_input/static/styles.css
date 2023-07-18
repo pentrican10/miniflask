@@ -1,0 +1,20 @@
+
+
+textarea{
+    padding:10px;
+    margin:10px;
+    resize:both;
+    overflow:hidden;
+    height:auto;
+    transition: height 0.2s ease-in-out;
+    cursor:grab;
+}
+
+#displayarea{
+    margin-top:20px;
+    font-weight:bold;
+}
+
+textarea:active{
+    cursor:grabbing;
+}

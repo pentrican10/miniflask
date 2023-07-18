@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Input Display Web App</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+  <script>
+    function confirmOverwrite() {
+      return confirm("Are you sure you want to overwrite this file?");
+    }
+
+    function autoResizeTextarea(){
+      var textarea= document.getElementById("inputField");
+      textarea.style.height="auto";
+      textarea.style.height = (textarea.scrollHeight + 2)+ "px";
+    }
+    /* function enableResize(){
+      var textarea = document.getElementById("inputField");
+      textarea.addEventListener("mousedown", startDrag);
+    }
+
+    function startDrag(e){
+      e.preventDefault();
+      window.addEventListener("mousemove", resizeTextarea);
+      window.addEventListener("mouseup", stopDrag);
+    }
+
+    function resizeTextarea(e){
+      var textarea = document.getElementById("inputField");
+      textarea.style.height=(textarea.clientHeight + e.movementY)+"px";
+    }
+
+    function stopDrag(){
+      window.removeEventListener("mousemove", resizeTextarea);
+      window.removeEventListener("mouseup", stopDrag);
+    }
+     */
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Input Display Web App</h1>
+    <form action="{{ url_for('save') }}" method="POST">
+      <textarea type="inputField" name="inputField" placeholder="Enter your text" oninput="autoResizeTextarea()"></textarea>
+      <br>
+      <button type="submit" name="actionButton" value="overwrite" onclick="return confirmOverwrite()">Save (Overwrite)</button>
+      <button type="submit" name="actionButton" value="append">Save (Append)</button>
+      <button type="submit" name="actionButton" value="display">Display Only</button>
+    </form>
+    <div id="displayArea">
+      {% if file_content %}
+        <h2>Text File Content:</h2>
+        <ul>
+          {% for entry in file_content %}
+            <li>{{ entry }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>  <!--script.js-->
+
+</body>
+</html>
