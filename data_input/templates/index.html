@@ -13,32 +13,28 @@
       textarea.style.height="auto";
       textarea.style.height = (textarea.scrollHeight + 2)+ "px";
     }
-    /* function enableResize(){
-      var textarea = document.getElementById("inputField");
-      textarea.addEventListener("mousedown", startDrag);
-    }
-
-    function startDrag(e){
-      e.preventDefault();
-      window.addEventListener("mousemove", resizeTextarea);
-      window.addEventListener("mouseup", stopDrag);
-    }
-
-    function resizeTextarea(e){
-      var textarea = document.getElementById("inputField");
-      textarea.style.height=(textarea.clientHeight + e.movementY)+"px";
-    }
-
-    function stopDrag(){
-      window.removeEventListener("mousemove", resizeTextarea);
-      window.removeEventListener("mouseup", stopDrag);
-    }
-     */
+    
   </script>
 </head>
 <body>
+  <h1>Input Display Web App</h1>
+
   <div class="container">
-    <h1>Input Display Web App</h1>
+<!--     <form action="/starid" method="POST">
+      <label for="star_id">Enter Star Id</label>
+      <br>
+      <input type="text" id="star_id" name="star_id" placeholder="Enter Star Id">
+      <button type="submit">Go!</button>
+    </form>
+
+    <div id="resultSection">
+      {% if file_content %}
+        <h2>Star File Content:</h2>
+        <pre>{{ file_content }}</pre>
+      {% endif %}
+    </div>
+ -->
+
     <form action="{{ url_for('save') }}" method="POST">
       <textarea type="inputField" name="inputField" placeholder="Enter your text" oninput="autoResizeTextarea()"></textarea>
       <br>
@@ -59,6 +55,6 @@
   </div>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>  <!--script.js-->
-
+  
 </body>
 </html>
