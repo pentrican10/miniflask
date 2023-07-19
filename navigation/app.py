@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for, request
 
 app = Flask(__name__)
-app.secret_key = 'dummy_key'
+app.secret_key = 'super_secret'
 
 
 @app.route('/')
@@ -11,7 +11,7 @@ def index():
 
 @app.route('/home')
 def home():
-    if session['username']:
+    if 'username' in session:
         return render_template('index.html', username=session['username'])
     else:
         return redirect(url_for('login'))
