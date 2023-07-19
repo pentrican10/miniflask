@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resizable Text Box</title>
+</head>
+<body>
+    <h1>Hello, welcome to our web app!</h1>
+    <form>
+        <textarea id="user_input" name="user_input" rows="4", placeholder="Enter text"></textarea>
+        <button type="button" id="go_button">GO</button>
+    </form>
+    <div id="display_area"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
