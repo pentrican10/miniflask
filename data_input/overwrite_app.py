@@ -55,7 +55,6 @@ def display():
     #read txt file
     with open('input.txt', 'r') as file:
         file_content = file.readlines()
-    return render_template('index.html', file_content=file_content)
 
 if __name__ == '__main__':
     app.run()
