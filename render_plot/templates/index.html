@@ -22,6 +22,7 @@
         <form action="/save_star_id" method="POST">
             <input type="text" class="input_box" placeholder="Enter Star Id" name="star_id">
             <button type="submit">Submit Star ID</button>
+
         </form>
 
 
@@ -35,28 +36,29 @@
             {% endif %}
         {% endif %}
 
-<!--         <h3>Enter the Star ID:</h3>
+        <br>
+        
         <form action="/" method="post">
-            <input type="text" name="file_path">
             <input type="submit" value="Generate Plot">
         </form>
+    
+        <!-- Plot area to display the plot -->
         {% if plot_div %}
             <h2>Plot for Star {{ star_id }}:</h2>
             <div id="plot-div">{{ plot_div | safe }}</div>
-        {% endif %} -->
+        {% endif %}
 
+    
     </div>
-    <h3>Enter the Star ID:</h3>
-    <form action="/" method="post">
-        <input type="text" name="file_path">
+<!--     <form action="/" method="post">
         <input type="submit" value="Generate Plot">
     </form>
-
+ -->
     <!-- Plot area to display the plot -->
-    {% if plot_div %}
+<!--     {% if plot_div %}
         <h2>Plot for Star {{ star_id }}:</h2>
         <div id="plot-div">{{ plot_div | safe }}</div>
-    {% endif %}
+    {% endif %} -->
 </body>
 </html>
 
