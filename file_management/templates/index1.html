@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Manager</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        window.onload = function(){
+            var dynamicText = star_id;
+            document.getElementById
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+
+        <form action="/directory" method="POST">
+            <label for="user_input">Enter Project Directory</label>
+            <br>
+            <input type="text" id="user_input" name="project_dir" placeholder="Enter Project Directory">
+            <button type="submit">Go!</button>
+            <div id="displayDirectory">
+                {% if data_dir %}
+                    <h2>Your Project Directory:</h2>
+                    <pre>{{ data_dir }}</pre>
+                {% endif %}
+            </div>
+        </form>
+
+        <form action="/starid" method="POST">
+            <label for="user_input">Enter Star Id:</label>
+            <br>
+            <input type="text" id="user_input" name="star_id" placeholder="Enter Star Id">
+            <button type="submit">Go!</button>
+        
+            <div id="displayFile">
+                {% if file_content %}
+                    <h2>Text File Content:</h2>
+                    <ul>
+                        {% for entry in file_content %}
+                            <li>{{ entry }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    
+   <!--  <pre id="result"></pre>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('form').submit(function(event) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/process',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#result').text(response);
+                }
+            });
+        });
+    </script> -->
+
+</body>
+
+</html>
