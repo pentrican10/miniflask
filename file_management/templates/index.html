@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project Directory Web App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 100px;
+        }
+        .input-box {
+            margin-bottom: 10px;
+        }
+        .output {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="/save_project_dir" method="post">
+            <input type="text" class="input-box" placeholder="Enter Project Directory" name="project_dir">
+            <button type="submit">Submit</button>
+        </form>
+        {% if project_dir %}
+            <div class="output">Current Project Directory: {{ project_dir }}</div>
+        {% endif %} 
+
+        <br>
+        <form action="/save_star_id" method="POST">
+            <input type="text" class="input_box" placeholder="Enter Star Id" name="star_id">
+            <button type="submit">Submit Star ID</button>
+        </form>
+
+
+        {% if star_id %}
+            <div class="output">Star ID: {{ star_id }}</div>
+            {% if star_file_content %}
+                <div class="output">File Content for {{ star_id }}:</div>
+                <pre>{{ star_file_content }}</pre>
+            {% else %}
+                <div class="output">No file found for {{ star_id }}.</div>
+            {% endif %}
+        {% endif %}
+
+
+    </div>
+</body>
+</html>
+
+
+<!-- 
+<html>
+<head>
+    <title>Multi-Input Web App</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 100px;
+        }
+        .input-box {
+            margin-bottom: 10px;
+        }
+        .output {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="/sentence" method="post">
+            <input type="text" class="input-box" placeholder="Enter noun" name="noun">
+            <button type="submit">Go!</button>
+        </form>    
+        <form action="/sentence" method="POST">    
+            <input type="text" class="input-box" placeholder="Enter verb" name="verb">
+            <button type="submit">Go!</button>
+        </form>
+        <div class="output">{{ sent }}</div>
+    </div>
+</body>
+</html>
+ -->
