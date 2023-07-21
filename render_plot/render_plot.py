@@ -24,7 +24,7 @@ def home():
 def save_project_dir():
     project_dir= request.form.get('project_dir') #None
     session['project_dir']=project_dir
-    data_dir=os.path.join(project_dir, 'kepler_lightcurves_for_paige')
+    data_dir=os.path.join(project_dir, 'miniflask', 'kepler_lightcurves_for_paige')
     session['data_dir']=data_dir
     #return redirect(url_for('index'))
     return render_template('index.html', project_dir=project_dir)
