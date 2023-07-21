@@ -7,16 +7,21 @@ import os
 
 #test assignment read and plot, do it through a web app, enter dir and ID and display plot
 
+#pass all variables to render_template
+
 app = Flask(__name__)
 app.secret_key='secret'
 
 
 @app.route('/', methods=['GET', 'POST'])
-def index():
+def index(): #make index only called when first boot up app
     plot_div=None #what is this
-    
+    star_id=None
+    project_dir=None
+    data_dir=None
+
     if request.method == 'POST':
-        project_dir = request.form.get('project_dir')
+        project_dir = request.form.get('project_dir')   #this could be why the proj dir disappears, requests the dir every time the button is pressed
         session['project_dir']=project_dir
         data_dir=session.get('data_dir')
 
@@ -30,7 +35,7 @@ def index():
                  title="Kepler Detrended Light Curve")
         plot_div = fig.to_html(full_html=False, include_plotlyjs='cdn')
 
-        return render_template('index.html', plot_div=plot_div, project_dir=project_dir)
+        return render_template('index.html', plot_div=plot_div, project_dir=project_dir, star_id =star_id)
 
     project_dir = session.get('project_dir') #None
     if project_dir:
@@ -38,13 +43,14 @@ def index():
         session['data_dir']= data_dir
 
     data_dir=session.get('data_dir')
-    return render_template('index.html', project_dir=project_dir, data_dir=data_dir)
+    return render_template('index.html', plot_div=plot_div,star_id =star_id, project_dir=project_dir) #, data_dir=data_dir)
 
 
 @app.route('/save_project_dir', methods=['POST'])
 def save_project_dir():
     session['project_dir']= request.form.get('project_dir') #None
-    return redirect(url_for('index'))
+    #return redirect(url_for('index'))
+    return render_template('index.html')
 
 @app.route('/save_star_id', methods=['POST'])
 def save_star_id():
@@ -53,7 +59,7 @@ def save_star_id():
     project_dir = session.get('project_dir','')
     #star_file_content = read_star_file(star_id)
     data_dir = session.get('data_dir') #None
-    return render_template('index.html', data_dir=data_dir, star_id=star_id)
+    return render_template('index.html', star_id=star_id, project_dir=project_dir)
 
 def read_data_from_fits(file_path): #eventually want to make it to it is based on user input
     fits_file = fits.open(file_path)

@@ -7,7 +7,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Enter the Project Directory:</h1>
+        <h1>Plot Generator</h1>
+        <h2>Enter the Project Directory:</h2>
 
         <form action="/save_project_dir" method="post">
             <input type="text" class="input-box" placeholder="Enter Project Directory" name="project_dir">
@@ -34,10 +35,13 @@
             {% else %}
                 <div class="output">No file found for {{ star_id }}.</div>
             {% endif %}
+
+
+
         {% endif %}
 
         <br>
-        
+
         <form action="/" method="post">
             <input type="submit" value="Generate Plot">
         </form>
