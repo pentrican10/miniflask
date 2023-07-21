@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Star ID Input</title>
+    <script>
+        function submitForm() {
+            var starId = document.getElementById('star_id').value;
+            window.location.href = '/' + encodeURIComponent(starId);
+            return false;
+        }
+    </script>
+</head>
+<body>
+    <h1>Enter Star ID:</h1>
+    <form onsubmit="return submitForm();">
+        <input type="text" id="star_id" required>
+        <input type="submit" value="Submit">
+    </form>
+    {% if star_id %}
+        <p>Star ID submitted: {{ star_id }}</p>
+    {% endif %}
+</body>
+</html>
