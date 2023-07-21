@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-import plotly.graph_objs as go
 import plotly.express as px
 from astropy.io import fits
 import pandas as pd
@@ -15,7 +14,7 @@ app.secret_key='secret'
 
 @app.route('/', methods=['GET', 'POST'])
 def index(): #make index only called when first boot up app
-    plot_div=None #what is this
+    plot_div=None 
     star_id=None
     project_dir=None
     data_dir=None
@@ -48,7 +47,8 @@ def index(): #make index only called when first boot up app
 
 @app.route('/save_project_dir', methods=['POST'])
 def save_project_dir():
-    session['project_dir']= request.form.get('project_dir') #None
+    project_dir= request.form.get('project_dir')  #changed this to get and THEN set as session variable
+    session['project_dir']=project_dir
     #return redirect(url_for('index'))
     return render_template('index.html')
 
