@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Star ID and Project Directory Input</title>
+    <script>
+        function submitStarForm() {
+            var starId = document.getElementById('star_id').value;
+            window.location.href = '/' + encodeURIComponent(starId);
+            return false;
+        }
+    </script>
+</head>
+<body>
+    <h1>Enter Project Directory:</h1>
+    <form method="POST" action="/submit_project_dir">
+        <input type="text" name="project_dir" required>
+        <input type="submit" value="Submit">
+    </form>
+
+    <h1>Enter Star ID:</h1>
+    <form onsubmit="return submitStarForm();">
+        <input type="text" id="star_id" required>
+        <input type="submit" value="Submit">
+    </form>
+
+<!--     <h1>Enter Project Directory:</h1>
+    <form method="POST" action="/submit_project_dir">
+        <input type="text" name="project_dir" required>
+        <input type="submit" value="Submit">
+    </form> -->
+
+    {% if star_id %}
+        <p>Star ID submitted: {{ star_id }}</p>
+    {% endif %}
+
+    {% if project_dir %}
+        <p>Current Project Directory: {{ project_dir }}</p>
+    {% endif %}
+</body>
+</html>

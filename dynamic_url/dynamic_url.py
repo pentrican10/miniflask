@@ -12,5 +12,6 @@ def process_star(star_id):
     return render_template('index.html', star_id=star_id)
 
 
+
 if __name__ == '__main__':
     app.run(debug=True)
