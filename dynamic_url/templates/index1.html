@@ -4,33 +4,73 @@
 <head>
     <title>Star ID and Project Directory Input</title>
     <script>
+        function submitProjectDir() {
+            window.location.href = '/home'; 
+            return false;
+        }
+    </script>
+
+    <script>
         function submitStarForm() {
             var starId = document.getElementById('star_id').value;
             window.location.href = '/' + encodeURIComponent(starId);
             return false;
         }
     </script>
+
+    <script>
+        function starPlotForm() {
+            var starId = document.getElementById('star_id').value;
+            window.location.href = '/' + encodeURIComponent(starId) + '/plot';
+            return false;
+        }
+    </script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
 </head>
 <body>
-    <h1>Enter Project Directory:</h1>
-    <form method="POST" action="/submit_project_dir">
-        <input type="text" name="project_dir"> <!--required-->
-        <input type="submit" value="Submit">
-    </form>
+    <div>
 
-    {% if project_dir %}
-        <p>Current Project Directory: {{ project_dir }}</p>
-    {% endif %}
 
-    <h1>Enter Star ID:</h1>
-    <form onsubmit="return submitStarForm();">
-        <input type="text" id="star_id">
-        <input type="submit" value="Submit">
-    </form>
+        <h2>Enter Project Directory:</h2>
+        <form id="projectDir" method="POST" action="{{ url_for('submit_project_dir') }}">
+            <input type="text" name="project_dir" placeholder="Enter Project Directory"> <!--required-->
+            <input type="submit" value="Submit" id="myProjectDir">
+        </form>
 
-    {% if star_id %}
-        <p>Star ID submitted: {{ star_id }}</p>
-    {% endif %}
+
+        {% if project_dir %}
+            <p>Current Project Directory: {{ project_dir }}</p>
+        {% endif %}
+
+        <h2>Enter Star ID:</h2>
+        <form onsubmit="return submitStarForm();">
+            <input type="text" id="star_id" placeholder="Enter Star ID">
+            <input type="submit" value="Submit">
+        </form>
+
+
+        {% if star_id %}
+            <p>Star ID submitted: {{ star_id }}</p>
+        {% endif %}
+
+        <br>
+        <form onsubmit="return starPlotForm();">
+            <input type="submit" value="Generate Plot">
+        </form>
+
+ 
+        <!-- Plot area to display the plot -->
+        {% if plot_div %}
+            <h2>Plot for Star {{ star_id }}:</h2>
+            <div id="plot-div">{{ plot_div | safe }}</div>
+        {% elif no_data %}
+            <p>{{ no_data }}</p>
+        {% endif %}
+
+    </div>
 
     
 </body>
