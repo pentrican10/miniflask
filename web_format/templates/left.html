@@ -3,7 +3,13 @@
     <body>
         <h1>Table Data</h1>
     <body>
-    <!-- Left section content will be inserted here -->
+    
+    <div>
+        <h2>Search KOI ID:</h2>
+        <input type="text" id="searchInput" placeholder="Enter KOI ID">
+    </div>
+
+
     <table>
         <tr>
             <th>koi_id</th>
@@ -14,8 +20,8 @@
             <th>logg</th>
         </tr>
         {% for row in table_data %}
-        <tr>
-            <td><a href="/star/{{ row['koi_id'] }}">{{ row['koi_id'] }}</a></td>
+        <tr class="koi-row">
+            <td class="koi-id-cell"><a href="/star/{{ row['koi_id'] }}">{{ row['koi_id'] }}</a></td>
             <td>{{ row['kep_mag'] }}</td>
             <td>{{ row['Rstar'] }}</td>
             <td>{{ row['logrho'] }}</td>
@@ -24,4 +30,45 @@
         </tr>
         {% endfor %}
     </table>
+
+    <div id="searchResults"></div>
+
+    <script>
+        // Function to handle the search
+        function searchKoi() {
+            const input = document.getElementById("searchInput");
+            const query = input.value.trim().toLowerCase();
+            const tableRows = document.querySelectorAll(".koi-row");
+
+            // Loop through table rows and check if the KOI ID matches the search query
+            let found = false;
+            for (const row of tableRows) {
+                const koiIdCell = row.querySelector(".koi-id-cell");
+                const koiId = koiIdCell.textContent.trim().toLowerCase();
+
+                if (koiId.includes(query)) {
+                    // Display the row if the KOI ID matches the search query
+                    row.style.display = "";
+                    found = true;
+                } else {
+                    // Hide the row if the KOI ID does not match the search query
+                    row.style.display = "none";
+                }
+            }
+
+            if (!found) {
+                // Display a message if no match is found
+                const searchResultsDiv = document.getElementById("searchResults");
+                searchResultsDiv.innerHTML = "<p>No match found.</p>";
+            } else {
+                // Clear the message if a match is found
+                const searchResultsDiv = document.getElementById("searchResults");
+                searchResultsDiv.innerHTML = "";
+            }
+        }
+        // Event listener for input on the search bar
+        const searchInput = document.getElementById("searchInput");
+        searchInput.addEventListener("input", searchKoi);
+    
+    </script>
 </html>
