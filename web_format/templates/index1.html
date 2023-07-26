@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Add some padding and margin to create separation between the sections */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .split-container {
+            display: flex;
+            padding: 30px; /* Adjust the padding as needed */
+        }
+        .left-section {
+            width: 35%;
+            background-color:  #f1f1f1;
+        }
+        .right-section {
+            width: 65%;
+            padding-left: 20px;
+            background-color: #f9f9f9ec;
+        }
+
+    </style>
+</head>
+
+    <div style="display: flex;">
+        <div class="left-section">
+            <!-- Left section content -->
+            {{ left_content | safe }}
+        </div>
+        <div class="right-section">
+            <!-- Right section content will be inserted here -->
+            {{ right_content | safe }}
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code for handling the click event on the left side links
+        const koiIdContainer = document.getElementById("koi_id_container");
+
+        document.addEventListener("click", function(event) {
+            const target = event.target;
+            if (target.tagName === "A" && target.href) {
+                event.preventDefault();
+                const koiId = target.innerText;
+                koiIdContainer.innerHTML = `<h2>Selected koi_id: ${koiId}</h2>`;
+            }
+        });
+    </script>
+
+</body>
+</html>
