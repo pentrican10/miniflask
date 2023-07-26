@@ -34,7 +34,25 @@ def read_table_data():
             table_data.append(row)
     return table_data
 
+@app.route('/star/<koi_id>', methods=['GET', 'POST'])
+def display_comment_file(koi_id):
+    file_path = os.path.join('C:\\Users\\Paige\\Projects', 'miniflask', 'comment_files', f'{koi_id}_comments.txt')
+    
+    if request.method == 'POST':
+        comment = request.form.get('comment')
+        if comment:
+            with open(file_path, 'a') as file:
+                file.write(f'{comment}\n')
+    
+    if os.path.isfile(file_path):
+        with open(file_path, 'r') as file:
+            file_content = file.read()
+    else:
+        file_content = f'Comment file for {koi_id} not found.'
+    
+    return file_content
 
+"""
 @app.route('/star/<koi_id>')
 def display_comment_file(koi_id):
     file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','comment_files',f'{koi_id}_comments.txt')
@@ -44,7 +62,7 @@ def display_comment_file(koi_id):
     else:
         file_content = f'Comment file for {koi_id} not found.'
     return file_content
-    
+    """
 
 @app.route('/star/<koi_id>/plot')
 def generate_plot(koi_id):

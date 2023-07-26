@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Table Data</title>
+    <title>Kepler Data</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
@@ -43,14 +43,25 @@
 
     <script>
         // Function to generate and display the plot
-        // need to finish code when access to light curve/ FITS
-        function displayPlot(koiId) {
-            // Replace this with your logic to generate the plot based on the koiId
-            // use Plotly.js to create the plot
-            // For demonstration, I'm just adding a simple plot placeholder
-            const plotContainer = document.getElementById("plot-container");
-            plotContainer.innerHTML = "<div>Plot for koi_id: " + koiId + "</div>";
+
+
+
+        // Function to fetch and display the associated file content
+        function displayCommentFile(koiId) {
+            const fileContentContainer = document.getElementById("file_content_container");
+            fetch(`/star/${koiId}`)
+                .then(response => response.text())
+                .then(data => {
+                    fileContentContainer.innerHTML = `<pre>${data}</pre>`;
+                })
+                .catch(error => {
+                    fileContentContainer.innerHTML = "<p>Error loading comment file.</p>";
+                    console.error(error);
+                });
+            
         }
+            
+        
 
         // JavaScript code for handling the click event on the left side links
         document.addEventListener("click", function(event) {
@@ -60,9 +71,11 @@
                 const koiId = target.innerText;
                 const koiIdContainer = document.getElementById("koi_id_container");
                 koiIdContainer.innerHTML = `<h2>Selected koi_id: ${koiId}</h2>`;
+                displayCommentFile(koiId);
+                generatePlot();
 
-                displayPlot(koiId);
-            }
+
+            } 
         });
 
     </script>

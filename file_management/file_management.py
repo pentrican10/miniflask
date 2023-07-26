@@ -27,7 +27,7 @@ def read_star_file(star_id):
         return 'File not found.'
 
     with open(file_path, 'r') as file:
-        file_content = file.read()
+        file_content = file.read() 
     return file_content
 
 @app.route('/save_star_id', methods=['POST'])
