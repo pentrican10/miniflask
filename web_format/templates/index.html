@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+    <h1>Table Data</h1>
+    <table>
+        <tr>
+            <th>koi_id</th>
+            <th>kep_mag</th>
+            <th>Rstar</th>
+            <th>logrho</th>
+            <th>Teff</th>
+            <th>logg</th>
+        </tr>
+        {% for row in table_data %}
+        <tr>
+            <td>{{ row['koi_id'] }}</td>
+            <td>{{ row['kep_mag'] }}</td>
+            <td>{{ row['Rstar'] }}</td>
+            <td>{{ row['logrho'] }}</td>
+            <td>{{ row['Teff'] }}</td>
+            <td>{{ row['logg'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
