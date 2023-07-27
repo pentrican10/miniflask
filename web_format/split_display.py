@@ -26,8 +26,9 @@ app = Flask(__name__)
 def display_table_data():
     table_data = read_table_data()
     left_content = render_template('left.html', table_data=table_data)
-    right_content = render_template('right.html')
-    return render_template('index1.html',left_content=left_content, right_content=right_content)
+    right_top_content = render_template('right_top.html')
+    right_bottom_content = render_template('right_bottom.html')
+    return render_template('index1.html',left_content=left_content, right_top_content=right_top_content, right_bottom_content=right_bottom_content)
 
 def read_table_data():
     file_path = os.path.join(os.path.dirname(__file__), 'data', '2023-05-19_singles.csv')
@@ -51,10 +52,26 @@ def display_comment_file(koi_id):
     file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','comment_files',f'{koi_id}_comments.txt')
     if os.path.isfile(file_path):
         with open(file_path, 'r') as file:
-            file_content = file.read()
+                file_content = file.read()
     else:
         file_content = f'Comment file for {koi_id} not found.'
     return file_content
+
+@app.route('/star/<koi_id>/save_comment', methods=['POST'])
+def save_comment(koi_id):
+    file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','comment_files',f'{koi_id}_comments.txt')
+    comment = request.form.get('comment')
+    action = request.form.get('action')
+    if comment and action in ['overwrite','append']:
+        with open(file_path, 'w' if action == 'overwrite' else 'a') as file:
+            file.write("\n")
+            #file.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            #file.write(f"User: {current_user}\n")
+            file.write(f"Comment: {comment}\n")
+            
+            
+
+    return display_comment_file(koi_id)
     
 
 if __name__ == '__main__':

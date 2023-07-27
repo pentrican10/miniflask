@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Right Section</title>
+</head>
+<body>
+    <h1>Comment Section</h1>
+
+
+    <!--comment file displayed-->
+    <div id="file_content_container"></div>
+
+    <h2>Add Comments:</h2>
+        <form id="comment_form" method="POST" action="/star/{{ koi_id }}/save_comment">
+            <textarea name="comment" rows="4" cols="50" placeholder="Type your comment here..."></textarea>
+            <br>
+            <input type="submit" value="Submit Comment: Qverwrite" onclick="setAction('overwrite')">
+            <input type="submit" value="Submit Comment: Append" onclick="setAction('append')">
+            <!--hidden input to hold action value-->
+            <input type="hidden" name="action" id="action_input" value="">
+        </form>
+        <div id="file_content_container"></div>
+
+
+
+    
+    <script>
+        // Global variable to store the selected KOI_ID
+        let selectedKoiId = null;
+
+        //function to set action value
+        function setAction(action) {
+            const actionInput = document.getElementById("action_input");
+            if (!selectedKoiId){
+                actionInput.value="overwrite";
+            }else {
+                actionInput.value=action;
+            
+                if (action === "overwrite") {
+                    // ask confirmation before overwriting file
+                    const isConfirmed = confirm("Are you sure you want to overwrite this file? All comments will be lost.");
+                    if (!isConfirmed) {
+                        actionInput.value = "";
+                    }
+                }
+            }
+        }
+
+        // Function to handle the "Submit Comment" button click event
+        function handleSubmitComment(event) {
+            event.preventDefault();
+            const commentForm = document.getElementById("comment_form");
+            const commentInput = commentForm.elements["comment"];
+            const comment = commentInput.value.trim();
+            const actionInput = document.getElementById("action_input");
+            const action = actionInput.value
+
+            if (!selectedKoiId) {
+                // If no KOI_ID link is selected, display a pop-up warning
+                alert("Please click a KOI_ID link before submitting a comment.");
+            } else {
+                // Submit the comment and add it to the associated comment file
+                //const comment = commentInput.value.trim();
+                // Perform the necessary actions to add the comment to the comment file associated with selectedKoiId
+                if(comment) {
+                    const formData = new FormData();
+                    formData.append("comment",comment);
+                    formData.append("action", action);
+
+                    fetch(`/star/${selectedKoiId}/save_comment`,{
+                        method: "POST",
+                        body: formData,
+                    })
+                        .then(response =>response.text())
+                        .then(data => {
+                            //handle response?
+                            console.log(data);
+                            //fetch and display comment file again after submitting comment
+                            displayCommentFile(selectedKoiId);
+                            //reset form after submitting comment
+                            commentForm.reset();
+                        })
+                        .catch(error => {
+                            console.error("Error adding comment:", error);
+                        });
+                    
+                } else {
+                    alert("Please enter a comment before submitting");
+                }
+
+                
+            }
+            
+        }
+
+        // Event listener for submitting the comment
+        const commentForm = document.getElementById("comment_form");
+        commentForm.addEventListener("submit", handleSubmitComment);
+
+        // Function to fetch and display the associated file content
+        //function displayCommentFile(koiId) {
+            // ... (your existing fetch code to display comment file content)
+            // Update the global selectedKoiId variable when a link is clicked
+            //selectedKoiId = koiId;
+        //}
+    </script>
+</body>
+</html>
+

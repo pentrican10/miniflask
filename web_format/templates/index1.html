@@ -4,30 +4,6 @@
     <title>Kepler Data</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style>
-        /* Add some padding and margin to create separation between the sections */
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        .split-container {
-            display: flex;
-            padding: 30px; /* Adjust the padding as needed */
-        }
-        .left-section {
-            width: 35%;
-            padding-left: 20px;
-            padding-right: 20px;
-            background-color:  #f1f1f1;
-        }
-        .right-section {
-            width: 65%;
-            padding-left: 20px;
-            padding-right: 20px;
-            background-color: #f9f9f9ec;
-        }
-
-    </style>
 </head>
 
     <div style="display: flex;">
@@ -36,8 +12,14 @@
             {{ left_content | safe }}
         </div>
         <div class="right-section">
-            <!-- Right section content will be inserted here -->
-            {{ right_content | safe }}
+            <div class="right-top-section">
+                {{ right_top_content | safe }}
+            </div>
+            <div class="right-bottom-section">
+                {{ right_bottom_content | safe }}
+            </div>
+            <!-- Right section content will be inserted here 
+            {{ right_content | safe }} -->
         </div>
     </div>
 
@@ -58,8 +40,12 @@
                     fileContentContainer.innerHTML = "<p>Error loading comment file.</p>";
                     console.error(error);
                 });
+            selectedKoiId = koiId; //
             
         }
+
+        // function to handle the "submit comment" 
+
             
         
 
@@ -71,8 +57,9 @@
                 const koiId = target.innerText;
                 const koiIdContainer = document.getElementById("koi_id_container");
                 koiIdContainer.innerHTML = `<h2>Selected koi_id: ${koiId}</h2>`;
+                selectedKoiId = koiId;
                 displayCommentFile(koiId);
-                generatePlot();
+                //generatePlot();
 
 
             } 
