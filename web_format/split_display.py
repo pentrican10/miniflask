@@ -8,6 +8,17 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 #split display demo
 
+#comments box show up on load
+# comments.txt master file for comments
+# comments will be entered:
+    #datetime
+    #user
+        #comment
+    # /n
+
+#display current star, if no star, then pop up saying star must be selected
+
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -46,6 +57,12 @@ def display_comment_file(koi_id):
     return file_content
     
 
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+"""
 @app.route('/star/<koi_id>/plot')
 def generate_plot(koi_id):
     star_id = koi_id.replace("K","S")
@@ -73,6 +90,4 @@ def read_data_from_fits(file_path):
         FLUX=flux
     ))
     return df
-
-if __name__ == '__main__':
-    app.run(debug=True)
+"""

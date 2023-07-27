@@ -52,7 +52,7 @@
             fetch(`/star/${koiId}`)
                 .then(response => response.text())
                 .then(data => {
-                    fileContentContainer.innerHTML = `<pre>${data}</pre>`;
+                    fileContentContainer.innerHTML = `<p>Comment file contents: `+`<pre>${data}</pre>`;
                 })
                 .catch(error => {
                     fileContentContainer.innerHTML = "<p>Error loading comment file.</p>";
