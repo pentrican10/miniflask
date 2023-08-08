@@ -62,14 +62,15 @@ def save_comment(koi_id):
     file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','comment_files',f'{koi_id}_comments.txt')
     comment = request.form.get('comment')
     action = request.form.get('action')
-    if comment and action in ['overwrite','append']:
-        with open(file_path, 'w' if action == 'overwrite' else 'a') as file:
-            file.write("\n")
-            #file.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-            #file.write(f"User: {current_user}\n")
-            file.write(f"Comment: {comment}\n")
+    #if comment and action in ['overwrite','append']:
+    with open(file_path, 'w' if action == 'overwrite' else 'a') as file:
+        file.write("\n")
+        #file.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        #file.write(f"User: {current_user}\n")
+        file.write(f"Comment: {comment}\n")
             
-            
+        # button to maually edit file and pull up file
+        # pop up txt file and edit text, new window, warn directly editing comments file
 
     return display_comment_file(koi_id)
     
