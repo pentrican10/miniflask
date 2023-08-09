@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
     <body>
+        <div id="username-container">
+            {% if 'username' in session %}
+                Logged in as: {{ session['username'] }}
+                <form action="{{ url_for('logout') }}" method="POST">
+                    <input type="submit" value="Logout" class="logout-button">
+                </form>
+            {% endif %}
+        </div>
         <h1>Table Data</h1>
     <body>
     
@@ -69,6 +77,15 @@
         // Event listener for input on the search bar
         const searchInput = document.getElementById("searchInput");
         searchInput.addEventListener("input", searchKoi);
+
+
+        
+ 
+        
+        
+
+
+
     
     </script>
 </html>

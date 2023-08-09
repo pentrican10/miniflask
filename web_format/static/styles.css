@@ -36,16 +36,20 @@
         padding: 10px;
         max-height: 500px;
         overflow-y: auto;
-        background-color: rgb(154, 154, 235);
     }
     .left-pane{
-        padding: 10px;
+        padding: 0;
     }
     .comment-content{
-        max-width:100%;
+        max-width:400px;
         word-wrap: break-word;
         overflow-wrap: break-word;
     }
+
+    .logout-button{
+        background-color: #b0d5ed
+    }
+
 /*</style>*/
 
 
