@@ -23,24 +23,18 @@
             <h2>Comment Section</h2>
             <!--comment file displayed-->
             
-            <div id="file_content_container" class="comment-content"></div>
+            <div class="comment-content">
+                <div id="file_content_container"></div>
+                <button id="editButton" style="display: none;">Edit Comment File</button>
+                <textarea id="editTextarea" name="content" style="display: none;" rows="20" cols="35">{{ file_content }}</textarea>
+                <button id="saveChangesButton" style="display: none;">Save Changes</button>
+
+            </div>
+
         </div>
 
     </div>
-    <!-- <h1>Comment Section</h1> -->
-    <!--comment file displayed-->
-    <!-- <div id="file_content_container"></div> -->
 
-    <!-- <h2>Add Comments:</h2>
-        <form id="comment_form" method="POST" action="/star/{{ koi_id }}/save_comment">
-            <textarea name="comment" rows="4" cols="50" placeholder="Type your comment here..."></textarea>
-            <br>
-            <input type="submit" value="Submit Comment: Append" onclick="setAction('append')"> -->
-            <!--hidden input to hold action value-->
-        <!--     <input type="hidden" name="action" id="action_input" value="">
-        </form>
-        <div id="file_content_container"></div>
- -->
 
 
     
@@ -110,12 +104,83 @@
         const commentForm = document.getElementById("comment_form");
         commentForm.addEventListener("submit", handleSubmitComment);
 
-        // Function to fetch and display the associated file content
-        //function displayCommentFile(koiId) {
-            // ... (your existing fetch code to display comment file content)
-            // Update the global selectedKoiId variable when a link is clicked
-            //selectedKoiId = koiId;
-        //}
+
+        // Function to handle the "Edit Comment File" button click event
+        function handleEditButtonClick() {
+            fetch(`/star/${selectedKoiId}`)
+                .then(response => response.text())
+                .then(data => {
+                    const fileContentContainer = document.getElementById("file_content_container");
+                    const editTextarea = document.getElementById("editTextarea");
+                    const saveChangesButton = document.getElementById("saveChangesButton");
+                    editTextarea.value = data.replace(/\r\n/g, '\n');
+                    // Display the content in a textarea
+                    editTextarea.value = data;
+                    fileContentContainer.style.display = "none";
+                    editTextarea.style.display = "block";
+                    saveChangesButton.style.display = "block";
+                })
+                .catch(error => {
+                    console.error("Error fetching comment file content:", error);
+                });
+        }
+
+
+        // Function to handle the "Save Changes" button click event
+        function handleSaveChangesButtonClick() {
+            //const editTextarea = document.getElementById("editTextarea");
+            //const newFileContent = editTextarea.value.trim();
+            //newFileContent = newFileContent.replace(/\r\n/g, '\n');
+            const editTextarea = document.getElementById("editTextarea");
+            let newFileContent = editTextarea.value.trim();
+            // Normalize line endings (replace Windows-style with Unix-style)
+            newFileContent = newFileContent.replace(/\r\n/g, '\n');
+
+            // Display a confirmation dialog before saving
+            const confirmSave = confirm("Are you sure you want to alter this file?");
+            if (!confirmSave) {
+                return;
+            }
+
+
+            const formData = new FormData();
+            formData.append("content", newFileContent); //investigate this
+            formData.append("action", "overwrite"); // Always overwrite the entire file
+
+            fetch(`/star/${selectedKoiId}/edit_file`, {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.text())
+                .then(data => {
+                    // Display the updated content in the container
+                    const fileContentContainer = document.getElementById("file_content_container");
+                    fileContentContainer.innerHTML = `<pre>${newFileContent}</pre>`;
+                
+                    // Hide the textarea and "Save Changes" button
+                    const editTextarea = document.getElementById("editTextarea");
+                    const saveChangesButton = document.getElementById("saveChangesButton");
+                    editTextarea.style.display = "none";
+                    saveChangesButton.style.display = "none";
+                    fileContentContainer.style.display = "block";
+                })
+                .catch(error => {
+                    console.error("Error saving comment file changes:", error);
+                });
+        }
+
+        // Event listener for the "Edit Comment File" button
+        const editButton = document.getElementById("editButton");
+        editButton.addEventListener("click", handleEditButtonClick);
+
+        // Event listener for the "Save Changes" button
+        const saveChangesButton = document.getElementById("saveChangesButton");
+        saveChangesButton.addEventListener("click", handleSaveChangesButtonClick);
+
+
+
+
+
     </script>
 </body>
 </html>

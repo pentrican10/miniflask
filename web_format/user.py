@@ -7,17 +7,7 @@ from astropy.io import fits
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-#split display demo
 
-#comments box show up on load
-# comments.txt master file for comments
-# comments will be entered:
-    #datetime
-    #user
-        #comment
-    # /n
-
-#display current star, if no star, then pop up saying star must be selected
 
 
 app = Flask(__name__)
@@ -83,20 +73,44 @@ def display_comment_file(koi_id):
 @app.route('/star/<koi_id>/save_comment', methods=['POST'])
 def save_comment(koi_id):
     file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','comment_files',f'{koi_id}_comments.txt')
-    comment = request.form.get('comment')
+    comment = request.form.get('comment').strip()
     action = request.form.get('action')
     username = session.get('username')
-    with open(file_path, 'w' if action == 'overwrite' else 'a') as file:
+
+    #if action == 'overwrite':
+    #    with open(file_path, 'w') as file:
+    #        file.write(comment)
+
+    #elif action == 'append' and comment.strip():
+    with open(file_path, 'a') as file:
         file.write("\n")
         file.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
         file.write(f"User: {username}\n")
         file.write(f"Comment: {comment}\n")
             
-        # button to maually edit file and pull up file
-        # pop up txt file and edit text, new window, warn directly editing comments file
-
+        
     return display_comment_file(koi_id)
-    
+
+@app.route('/star/<koi_id>/edit_file', methods=['POST'])
+def save_file(koi_id):
+    file_path = os.path.join('C:\\Users\\Paige\\Projects', 'miniflask', 'comment_files', f'{koi_id}_comments.txt')
+    content = request.form.get('content')
+    action = request.form.get('action')
+
+    # Normalize line endings to Unix-style (\n)
+    content = content.replace('\r\n', '\n')
+
+    #if action == 'overwrite' and content:
+    try:
+        with open(file_path, 'w') as file:
+            file.writelines(content)
+            file.write('\n')
+        return display_comment_file(koi_id)
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+    #return display_comment_file(koi_id)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

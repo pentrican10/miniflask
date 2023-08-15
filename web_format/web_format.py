@@ -1,3 +1,38 @@
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+def read_file_contents():
+    try:
+        with open('myfile.txt', 'r') as file:
+            return file.read()
+    except Exception as e:
+        return ""
+
+@app.route('/')
+def index():
+    current_contents = read_file_contents()
+    return render_template('index.html', current_contents=current_contents, updated_contents="")
+
+@app.route('/update', methods=['POST'])
+def update_file():
+    new_contents = request.form.get('file_contents')
+    try:
+        with open('myfile.txt', 'w') as file:
+            file.write(new_contents)
+        updated_contents = new_contents  # Use the new contents as updated contents
+        return render_template('index.html', current_contents=new_contents, updated_contents=updated_contents)
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+"""
 from flask import Flask, render_template 
 import csv
 import os
@@ -30,3 +65,5 @@ def read_table_data():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+"""
