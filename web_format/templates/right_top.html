@@ -2,14 +2,44 @@
 <html>
 <head>
     <title>Right Section</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <h1>Star Information Display</h1>
-    <!-- Add your content for the right section here -->
+    
     <div id="koi_id_container">
         <!-- The selected "koi_id" will be displayed here -->
     </div>
 
+    <div id="graph1" data-koi-id="{{ koi_id }}">
+        <!-- detrended light curve will display here -->
+    </div>
+
+
+    <script>
+        function generatePlot(koiId) {
+            const plotContainer = document.getElementById("graph1");
+
+            // Fetch the Plotly figure data from the server
+            fetch(`/generate_plot/${koiId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Received data:", data); // Log the received data
+                    const parsedData = JSON.parse(data);
+                    Plotly.newPlot(plotContainer, parsedData);
+                })
+                .catch(error => {
+                    plotContainer.innerHTML = "<p>Error loading plot data.</p>";
+                    console.error(error);
+                });
+        }
+    </script>
+
+    <!-- python to display static png image, ignore checkbox for now - rooms - then just one checkbox, then more-->
+    
+
+    
+    
 </body>
 </html>
 

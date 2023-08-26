@@ -128,9 +128,6 @@
 
         // Function to handle the "Save Changes" button click event
         function handleSaveChangesButtonClick() {
-            //const editTextarea = document.getElementById("editTextarea");
-            //const newFileContent = editTextarea.value.trim();
-            //newFileContent = newFileContent.replace(/\r\n/g, '\n');
             const editTextarea = document.getElementById("editTextarea");
             let newFileContent = editTextarea.value.trim();
             // Normalize line endings (replace Windows-style with Unix-style)
@@ -144,7 +141,7 @@
 
 
             const formData = new FormData();
-            formData.append("content", newFileContent); //investigate this
+            formData.append("content", newFileContent); 
             formData.append("action", "overwrite"); // Always overwrite the entire file
 
             fetch(`/star/${selectedKoiId}/edit_file`, {

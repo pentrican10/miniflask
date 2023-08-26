@@ -75,12 +75,13 @@ def plot():
 
 def read_data_from_fits(file_path):
     fits_file = fits.open(file_path)
-    time = fits_file[1].data
+    time = fits_file[1].data #verify data type, conversion
     flux = fits_file[2].data
     df = pd.DataFrame(dict(
         TIME=time,
         FLUX=flux
     ))
+    
     return df
 
 

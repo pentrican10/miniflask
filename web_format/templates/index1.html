@@ -15,18 +15,18 @@
         <div class="right-section">
             <div class="right-top-section">
                 {{ right_top_content | safe }}
+                
             </div>
             <div class="right-bottom-section">
                 {{ right_bottom_content | safe }}
             </div>
-            <!-- Right section content will be inserted here 
-            {{ right_content | safe }} -->
+            
         </div>
     </div>
 
     <script>
         // Function to generate and display the plot
-
+        
 
 
         // Function to fetch and display the associated file content
@@ -42,7 +42,7 @@
                     console.error(error);
                 });
             selectedKoiId = koiId; //
-            
+
             // Display the "Edit Comment File" button
             const editButton = document.getElementById("editButton");
             editButton.style.display = "block";
@@ -63,11 +63,14 @@
                 koiIdContainer.innerHTML = `<h2>Selected koi_id: ${koiId}</h2>`;
                 selectedKoiId = koiId;
                 displayCommentFile(koiId);
-                //generatePlot();
 
+                //when link clicked, make graph:
+                generatePlot(koiId);
 
             } 
         });
+
+        
 
     </script>
 

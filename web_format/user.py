@@ -5,6 +5,8 @@ from datetime import datetime
 import plotly.express as px
 from astropy.io import fits
 import pandas as pd
+import json
+import plotly.utils
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -34,7 +36,6 @@ def logout():
 
 @app.route('/home')
 def display_table_data():
-    #login = render_template('login.html')
     table_data = read_table_data()
     left_content = render_template('left.html', table_data=table_data)
     right_top_content = render_template('right_top.html')
@@ -45,7 +46,6 @@ def display_table_data():
 
 def read_table_data():
     file_path = os.path.join(os.path.dirname(__file__), 'data', '2023-05-19_singles.csv')
-
     table_data = []
     with open(file_path, 'r') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -74,33 +74,20 @@ def display_comment_file(koi_id):
 def save_comment(koi_id):
     file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','comment_files',f'{koi_id}_comments.txt')
     comment = request.form.get('comment').strip()
-    action = request.form.get('action')
     username = session.get('username')
-
-    #if action == 'overwrite':
-    #    with open(file_path, 'w') as file:
-    #        file.write(comment)
-
-    #elif action == 'append' and comment.strip():
     with open(file_path, 'a') as file:
         file.write("\n")
         file.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
         file.write(f"User: {username}\n")
         file.write(f"Comment: {comment}\n")
-            
-        
     return display_comment_file(koi_id)
 
 @app.route('/star/<koi_id>/edit_file', methods=['POST'])
 def save_file(koi_id):
     file_path = os.path.join('C:\\Users\\Paige\\Projects', 'miniflask', 'comment_files', f'{koi_id}_comments.txt')
     content = request.form.get('content')
-    action = request.form.get('action')
-
     # Normalize line endings to Unix-style (\n)
     content = content.replace('\r\n', '\n')
-
-    #if action == 'overwrite' and content:
     try:
         with open(file_path, 'w') as file:
             file.writelines(content)
@@ -108,10 +95,69 @@ def save_file(koi_id):
         return display_comment_file(koi_id)
     except Exception as e:
         return f"An error occurred: {str(e)}"
-    #return display_comment_file(koi_id)
+
+@app.route('/generate_plot/<koi_id>')
+def generate_plot(koi_id):
+    star_id = koi_id.replace("K","S")
+    file_name = star_id + '_lc_detrended.fits'
+    file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','kepler_lightcurves_for_paige',file_name)
+    #get data and create detrended light curve
+    if os.path.isfile(file_path):
+        data = read_data_from_fits(file_path)
+        fig = px.scatter(data, x="TIME", y="FLUX", 
+                    title="Kepler Detrended Light Curve")
+        graph1JSON= json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    else:
+        graph1JSON= json.dumps({'error': f'No data found for {koi_id}'})
+     
+    return jsonify(graph1JSON)
+    
 
 
+def read_data_from_fits(file_path):
+    with fits.open(file_path) as fits_file:
+        time = fits_file[1].data
+        flux = fits_file[2].data
+        df = pd.DataFrame(dict(
+            TIME=time,
+            FLUX=flux
+        ))
+    return df
 
 if __name__ == '__main__':
     app.run(debug=True)
 
+
+"""
+#multiple dynamic with html and java
+@app.route('/generate_plot/<koi_id>')
+def generate_plot(koi_id):
+    star_id = koi_id.replace("K","S")
+    file_name = star_id + '_lc_detrended.fits'
+    file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','kepler_lightcurves_for_paige',file_name)
+
+    #get data and create figure
+    if os.path.isfile(file_path):
+        data = read_data_from_fits(file_path)
+        fig = px.scatter(data, x="TIME", y="FLUX", 
+                    title="Kepler Detrended Light Curve")
+        plot_div = fig.to_html(full_html=False, include_plotlyjs='cdn')
+        return plot_div
+        #return jsonify(fig.to_plotly_json())
+    else:
+        #plot_div = f'No data found for { koi_id } in directory'
+        no_data =f'No data found for { koi_id } in directory'
+        return no_data
+    #return plot_div
+
+def read_data_from_fits(file_path):
+    with fits.open(file_path) as fits_file:
+        #fits_file = fits.open(file_path) #use with statement/ closes file
+        time = fits_file[1].data
+        flux = fits_file[2].data
+        df = pd.DataFrame(dict(
+            TIME=time,
+            FLUX=flux
+        ))
+    return df
+    """
