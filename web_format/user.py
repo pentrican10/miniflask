@@ -108,8 +108,8 @@ def generate_plot(koi_id):
                     title="Kepler Detrended Light Curve")
         graph1JSON= json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     else:
-        graph1JSON= json.dumps({'error': f'No data found for {koi_id}'})
-     
+        error_message = f'No data found for {koi_id}'
+        graph1JSON= json.dumps({'error': error_message})
     return jsonify(graph1JSON)
     
 

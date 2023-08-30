@@ -64,8 +64,16 @@
                 selectedKoiId = koiId;
                 displayCommentFile(koiId);
 
+                //show checkbox container
+                const checkboxContainer= document.getElementById("checkbox_container");
+                checkboxContainer.style.display= "block";
+                
                 //when link clicked, make graph:
                 generatePlot(koiId);
+
+                // Show the plot by default (since checkbox is checked)
+                const plotContainer = document.getElementById("graph1");
+                plotContainer.style.display = "block";
 
             } 
         });

@@ -11,7 +11,19 @@
         <!-- The selected "koi_id" will be displayed here -->
     </div>
 
-    <div id="graph1" data-koi-id="{{ koi_id }}">
+    <!--mini app for checkboxes, toggle on and off-->
+    <div id="checkbox_container" style="display:none;">
+        <input type="checkbox" id="plot1Checkbox" onchange="togglePlotVisibility()" checked/>
+        <label for="plot1Checkbox">Detrended Light Curve</label>
+
+        <input type="checkbox" id="plot2Checkbox" onchange="togglePlotVisibility()"/>
+        <label for="plot2Checkbox">Plot 2</label>
+
+
+    </div>
+    
+
+    <div id="graph1" data-koi-id="{{ koi_id }}" style="display:none;">
         <!-- detrended light curve will display here -->
     </div>
 
@@ -25,18 +37,38 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log("Received data:", data); // Log the received data
-                    const parsedData = JSON.parse(data);
-                    Plotly.newPlot(plotContainer, parsedData);
+                    if(data.error){
+                        // Display the error message in the plot container
+                        const plotContainer = document.getElementById("graph1");
+                        plotContainer.innerHTML = `<p>${data.error}</p>`;
+                    } else {
+                        // Clear any existing error message
+                        const plotContainer = document.getElementById("graph1");
+                        plotContainer.innerHTML = "";
+                        //display plot
+                        const parsedData = JSON.parse(data);
+                        Plotly.newPlot(plotContainer, parsedData);
+                    }
                 })
                 .catch(error => {
                     plotContainer.innerHTML = "<p>Error loading plot data.</p>";
                     console.error(error);
                 });
         }
-    </script>
 
-    <!-- python to display static png image, ignore checkbox for now - rooms - then just one checkbox, then more-->
-    
+        // Function to toggle plot visibility based on the checkbox
+        function togglePlotVisibility() {
+            const plotContainer = document.getElementById("graph1");
+            const plotCheckbox = document.getElementById("plot1Checkbox");
+        
+            if (plotCheckbox.checked) {
+                plotContainer.style.display = "block";  // Show the plot
+            } else {
+                plotContainer.style.display = "none";   // Hide the plot
+            }
+        }
+
+    </script>    
 
     
     
