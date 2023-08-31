@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Right Section</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Star Information Display</h1>
+    
+    <div id="koi_id_container">
+        <!-- The selected "koi_id" will be displayed here -->
+    </div>
+
+    <!--mini app for checkboxes, toggle on and off-->
+    <div id="checkbox_container" style="display:none;">
+        <input type="checkbox" id="plot1Checkbox" onchange="togglePlotVisibility()" checked/>
+        <label for="plot1Checkbox">Detrended Light Curve</label>
+
+        <input type="checkbox" id="plot2Checkbox" onchange="togglePlotVisibility()"/>
+        <label for="plot2Checkbox">Plot 2</label>
+        <!-- read in same photometry data, plot using dif color, 
+            write new python function
+            plot folded transit and also look at individual transits and flip through them
+            focus: how to make forward and back button for flipping through
+            start by plotting time=0->time=200, forward makes it t=200->t=400
+            forward and back button focus
+            box to enter quarter/segment number and jump to that section - 7 segments
+            clean and generalizable !!!
+            not rerendering when not necessary, want to be fast
+            look into plotly auto scaling on axis - might be faster to hardcode axis - low priority
+
+           -->
+
+
+    </div>
+    
+
+    <div id="graph1" data-koi-id="{{ koi_id }}" style="display:none;">
+        <!-- detrended light curve will display here -->
+    </div>
+
+
+    <script>
+        function generatePlot(koiId) {
+            const plotContainer = document.getElementById("graph1");
+            // Fetch the Plotly figure data from the server
+            fetch(`/generate_plot/${koiId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Received data:", data); // Log the received data
+
+                    
+
+                    if(data.error_message){ //check type, string vs number data
+                        // Display the error message in the plot container
+                        const plotContainer = document.getElementById("graph1");
+                        plotContainer.innerHTML = `<p>${data.error_message}</p>`;
+                    } else { //check formatting
+                        // Clear any existing error message
+                        const plotContainer = document.getElementById("graph1");
+                        plotContainer.innerHTML = "";
+                        //display plot
+                        const parsedData = JSON.parse(data);
+                        Plotly.newPlot(plotContainer, parsedData);
+                    }
+                })
+                .catch(error => {
+                    plotContainer.innerHTML = "<p>Error loading plot data.</p>";
+                    console.error(error);
+                });
+        }
+
+        // Function to toggle plot visibility based on the checkbox
+        function togglePlotVisibility() {
+            const plotContainer = document.getElementById("graph1");
+            const plotCheckbox = document.getElementById("plot1Checkbox");
+        
+            if (plotCheckbox.checked) {
+                plotContainer.style.display = "block";  // Show the plot
+            } else {
+                plotContainer.style.display = "none";   // Hide the plot
+            }
+        }
+
+    </script>    
+
+    
+    
+</body>
+</html>
+
