@@ -97,16 +97,16 @@ def save_file(koi_id):
         return f"An error occurred: {str(e)}"
 
 @app.route('/generate_plot/<koi_id>')
-def generate_plot(koi_id):
+def generate_plot_Detrended_Light_Curve(koi_id):
     star_id = koi_id.replace("K","S")
     file_name = star_id + '_lc_detrended.fits'
     file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','kepler_lightcurves_for_paige',file_name)
     #get data and create detrended light curve
     if os.path.isfile(file_path):
         data = read_data_from_fits(file_path)
-        fig = px.scatter(data, x="TIME", y="FLUX", 
-                    title="Kepler Detrended Light Curve")
-        graph1JSON= json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder) #possibly check if cls defined to differentiate 
+        fig = px.scatter(data, x="TIME", y="FLUX")#, 
+                    #title="Kepler Detrended Light Curve")
+        graph1JSON= json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder) 
         return jsonify(graph1JSON)
     else:
         error_message = f'No data found for {koi_id}'
@@ -122,6 +122,25 @@ def read_data_from_fits(file_path):
             FLUX=flux
         ))
     return df
+
+#plot 2, same as plot 1 but add the forward and backward buttons
+@app.route('/plot2/<koi_id>')
+def plot2(koi_id):
+    star_id = koi_id.replace("K","S")
+    file_name = star_id + '_lc_detrended.fits'
+    file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','kepler_lightcurves_for_paige',file_name)
+    #get data and create detrended light curve
+    if os.path.isfile(file_path):
+        data = read_data_from_fits(file_path)
+        fig = px.scatter(data, x="TIME", y="FLUX")
+        fig.update_traces(marker=dict(
+            color='red'))
+        graph2JSON= json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder) 
+        return jsonify(graph2JSON)
+    else:
+        error2 = f'No data found for {koi_id}'
+        return jsonify(error2=error2)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

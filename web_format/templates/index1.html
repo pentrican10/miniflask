@@ -25,10 +25,7 @@
     </div>
 
     <script>
-        // Function to generate and display the plot
         
-
-
         // Function to fetch and display the associated file content
         function displayCommentFile(koiId) {
             const fileContentContainer = document.getElementById("file_content_container");
@@ -49,10 +46,6 @@
             
         }
  
-
-            
-        
-
         // JavaScript code for handling the click event on the left side links
         document.addEventListener("click", function(event) {
             const target = event.target;
@@ -69,11 +62,13 @@
                 checkboxContainer.style.display= "block";
                 
                 //when link clicked, make graph:
-                generatePlot(koiId);
+                generatePlotDetrendedLightCurve(koiId); //replace with distriptive name generatePlotDetrendedLightCurve
 
-                // Show the plot by default (since checkbox is checked)
-                const plotContainer = document.getElementById("graph1");
-                plotContainer.style.display = "block";
+                //check what boxes are checked and display appropriate plots
+                togglePlotVisibilityDetrendedLightCurve()
+                togglePlotVisibility2()
+
+                
 
             } 
         });

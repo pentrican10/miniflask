@@ -11,13 +11,13 @@
         <!-- The selected "koi_id" will be displayed here -->
     </div>
 
-    <!--mini app for checkboxes, toggle on and off-->
+    <!--checkboxes -->
     <div id="checkbox_container" style="display:none;">
-        <input type="checkbox" id="plot1Checkbox" onchange="togglePlotVisibility()" checked/>
-        <label for="plot1Checkbox">Detrended Light Curve</label>
+        <input type="checkbox" id="plotCheckbox1" onchange="togglePlotVisibilityDetrendedLightCurve()" checked/> 
+        <label for="plotCheckbox1">Detrended Light Curve</label>
 
-        <input type="checkbox" id="plot2Checkbox" onchange="togglePlotVisibility()"/>
-        <label for="plot2Checkbox">Plot 2</label>
+        <input type="checkbox" id="plotCheckbox2" onchange="togglePlotVisibility2()"/>
+        <label for="plotCheckbox2">Plot 2</label>
         <!-- read in same photometry data, plot using dif color, 
             write new python function
             plot folded transit and also look at individual transits and flip through them
@@ -35,50 +35,103 @@
     </div>
     
 
+    <div id="graphTitle1" style="display:none;">
+        <h3>Kepler Detrended Light Curve:</h3>
+    </div>
     <div id="graph1" data-koi-id="{{ koi_id }}" style="display:none;">
         <!-- detrended light curve will display here -->
     </div>
 
+    <div id="graphTitle2" style="display:none;">
+        <h3>Plot 2:</h3>
+    </div>
+    <div id="graph2" data-koi-id="{{ koiId }}" style="display:none;">
+        <!-- plot with forward and backward buttons -->
+    </div>
 
     <script>
-        function generatePlot(koiId) {
-            const plotContainer = document.getElementById("graph1");
+        function generatePlotDetrendedLightCurve(koiId) {
+            const plotContainerDetrendedLightCurve = document.getElementById("graph1");
             // Fetch the Plotly figure data from the server
             fetch(`/generate_plot/${koiId}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log("Received data:", data); // Log the received data
-
-                    
-
-                    if(data.error_message){ //check type, string vs number data
+                    if(data.error_message){ 
                         // Display the error message in the plot container
-                        const plotContainer = document.getElementById("graph1");
-                        plotContainer.innerHTML = `<p>${data.error_message}</p>`;
-                    } else { //check formatting
+                        const plotContainerDetrendedLightCurve = document.getElementById("graph1");
+                        plotContainerDetrendedLightCurve.innerHTML = `<p>${data.error_message}</p>`;
+                    } else { 
                         // Clear any existing error message
-                        const plotContainer = document.getElementById("graph1");
-                        plotContainer.innerHTML = "";
+                        const plotContainerDetrendedLightCurve = document.getElementById("graph1");
+                        plotContainerDetrendedLightCurve.innerHTML = "";
                         //display plot
                         const parsedData = JSON.parse(data);
-                        Plotly.newPlot(plotContainer, parsedData);
+                        Plotly.newPlot(plotContainerDetrendedLightCurve, parsedData);
                     }
                 })
                 .catch(error => {
-                    plotContainer.innerHTML = "<p>Error loading plot data.</p>";
+                    plotContainerDetrendedLightCurve.innerHTML = "<p>Error loading plot data.</p>";
                     console.error(error);
                 });
         }
 
         // Function to toggle plot visibility based on the checkbox
-        function togglePlotVisibility() {
-            const plotContainer = document.getElementById("graph1");
-            const plotCheckbox = document.getElementById("plot1Checkbox");
+        function togglePlotVisibilityDetrendedLightCurve() {
+            const plotContainerDetrendedLightCurve = document.getElementById("graph1");
+            const plotCheckbox = document.getElementById("plotCheckbox1");
+            const plotTitle1 = document.getElementById("graphTitle1");
+
+            if (plotCheckbox.checked) {
+                plotTitle1.style.display = "block";
+                plotContainerDetrendedLightCurve.style.display = "block";  // Show the plot
+            } else {
+                plotTitle1.style.display = "none";
+                plotContainerDetrendedLightCurve.style.display = "none";   // Hide the plot
+            }
+        }
+
+
+        //plot 2
+        function plot2(koiId){
+            const plotContainerPlot2 = document.getElementById("graph2");
+            // Fetch the Plotly figure data from the server
+            fetch(`/plot2/${koiId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Received data:", data); // Log the received data
+                    if(data.error2){ 
+                        // Display the error message in the plot container
+                        const plotContainerPlot2 = document.getElementById("graph2");
+                        plotContainerPlot2.innerHTML = `<p>${data.error2}</p>`;
+                    } else { 
+                        // Clear any existing error message
+                        const plotContainerPlot2 = document.getElementById("graph2");
+                        plotContainerPlot2.innerHTML = "";
+                        //display plot
+                        const parsedData = JSON.parse(data);
+                        Plotly.newPlot(plotContainerPlot2, parsedData);
+                    }
+                })
+                .catch(error => {
+                    plotContainerPlot2.innerHTML = "<p>Error loading plot data.</p>";
+                    console.error(error);
+                });
+        }
+
+        //toggle plot 2
+        function togglePlotVisibility2() {
+            const plotContainerPlot2 = document.getElementById("graph2");
+            const plotCheckbox = document.getElementById("plotCheckbox2");
+            const plotTitle2 = document.getElementById("graphTitle2");
         
             if (plotCheckbox.checked) {
-                plotContainer.style.display = "block";  // Show the plot
+                plotTitle2.style.display = "block";
+                plotContainerPlot2.style.display = "block";  // Show the plot
+                plot2(selectedKoiId);
             } else {
-                plotContainer.style.display = "none";   // Hide the plot
+                plotTitle2.style.display = "none";
+                plotContainerPlot2.style.display = "none";   // Hide the plot
             }
         }
 
