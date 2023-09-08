@@ -48,6 +48,14 @@
     <div id="graph2" data-koi-id="{{ koiId }}" style="display:none;">
         <!-- plot with forward and backward buttons -->
     </div>
+    <div id="axisAdjustment" style="display:none;">
+        <!-- Add Forward and Backward buttons for Plot2 -->
+        <div id="currentTransit">
+            <!-- current transit number and center time should appear here-->
+        </div>
+        <button onclick="movePlotBackward()">Backward</button>
+        <button onclick="movePlotForward()">Forward</button>
+    </div>
 
     <script>
         function generatePlotDetrendedLightCurve(koiId) {
@@ -81,7 +89,7 @@
             const plotContainerDetrendedLightCurve = document.getElementById("graph1");
             const plotCheckbox = document.getElementById("plotCheckbox1");
             const plotTitle1 = document.getElementById("graphTitle1");
-
+            
             if (plotCheckbox.checked) {
                 plotTitle1.style.display = "block";
                 plotContainerDetrendedLightCurve.style.display = "block";  // Show the plot
@@ -93,10 +101,54 @@
 
 
         //plot 2
-        function plot2(koiId){
+
+        let currentStartTime = 0; // Initialize the start time
+        let currentEndTime = 200;
+        let currentTransitNumber = 0;
+
+        function movePlotBackward() {
+            currentTransitNumber -= 1;
+            if (currentTransitNumber <0) {
+                currentTransitNumber = 0;
+            }
+
+            const transitInfo = document.getElementById("currentTransit");
+            transitInfo.innerHTML = `<p>Current transit: Number ${currentTransitNumber}</p>`;
+
+            plot2(selectedKoiId, currentTransitNumber);
+            /*
+            currentStartTime -= 200;
+            currentEndTime -= 200;
+            if (currentStartTime < 0) {
+                currentStartTime = 0;
+                currentEndTime = 200;
+            }
+            plot2(selectedKoiId, currentStartTime, currentEndTime);
+            */
+        }
+
+        function movePlotForward() {
+            /*currentStartTime += 200;
+            currentEndTime += 200;
+            plot2(selectedKoiId, currentStartTime, currentEndTime);
+            */
+           currentTransitNumber += 1;
+
+           const transitInfo = document.getElementById("currentTransit");
+           transitInfo.innerHTML = `<p>Current transit: Number ${currentTransitNumber}</p>`;
+
+           plot2(selectedKoiId, currentTransitNumber);
+        }
+
+
+        
+
+
+
+        function plot2(koiId, currentTransitNumber){ //currentStartTime, currentEndTime){
             const plotContainerPlot2 = document.getElementById("graph2");
             // Fetch the Plotly figure data from the server
-            fetch(`/plot2/${koiId}`)
+            fetch(`/plot2/${koiId}/${currentTransitNumber}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log("Received data:", data); // Log the received data
@@ -108,6 +160,9 @@
                         // Clear any existing error message
                         const plotContainerPlot2 = document.getElementById("graph2");
                         plotContainerPlot2.innerHTML = "";
+
+                        const transitInfo = document.getElementById("currentTransit");
+                        transitInfo.innerHTML = `<p>Current transit: Number ${currentTransitNumber}</p>`;
                         //display plot
                         const parsedData = JSON.parse(data);
                         Plotly.newPlot(plotContainerPlot2, parsedData);
@@ -124,14 +179,17 @@
             const plotContainerPlot2 = document.getElementById("graph2");
             const plotCheckbox = document.getElementById("plotCheckbox2");
             const plotTitle2 = document.getElementById("graphTitle2");
+            const axisButtons = document.getElementById("axisAdjustment");
         
             if (plotCheckbox.checked) {
                 plotTitle2.style.display = "block";
                 plotContainerPlot2.style.display = "block";  // Show the plot
-                plot2(selectedKoiId);
+                axisButtons.style.display = "block";
+                plot2(selectedKoiId, currentTransitNumber);//currentStartTime, currentEndTime);
             } else {
                 plotTitle2.style.display = "none";
                 plotContainerPlot2.style.display = "none";   // Hide the plot
+                axisButtons.style.display = "none";
             }
         }
 

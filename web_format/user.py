@@ -124,8 +124,8 @@ def read_data_from_fits(file_path):
     return df
 
 #plot 2, same as plot 1 but add the forward and backward buttons
-@app.route('/plot2/<koi_id>')
-def plot2(koi_id):
+@app.route('/plot2/<koi_id>/<int:transit_number>')#<int:start_time>/<int:end_time>')
+def plot2(koi_id, transit_number): #start_time, end_time):
     star_id = koi_id.replace("K","S")
     file_name = star_id + '_lc_detrended.fits'
     file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','kepler_lightcurves_for_paige',file_name)
@@ -135,11 +135,39 @@ def plot2(koi_id):
         fig = px.scatter(data, x="TIME", y="FLUX")
         fig.update_traces(marker=dict(
             color='red'))
+        
+        center_time_values = read_center_time_values_from_file(koi_id)
+        center_time = center_time_values[transit_number]
+        
+        start_time = float(center_time) + 0.25
+        end_time= float(center_time) - 0.25
+        fig.update_layout(xaxis_range=[start_time,end_time])
         graph2JSON= json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder) 
         return jsonify(graph2JSON)
     else:
         error2 = f'No data found for {koi_id}'
         return jsonify(error2=error2)
+    
+def read_center_time_values_from_file(koi_id):
+    star_id = koi_id.replace("K","S")
+    file_name = star_id + '_00_quick.ttvs'
+    file_path = os.path.join('C:\\Users\\Paige\\Projects','miniflask','quick_ttvs_for_paige',file_name)
+
+    #delimiter = ' '
+    center_time_values=[]
+    # Open the file for reading
+    with open(file_path, 'r') as file:
+        # Iterate through each line in the file
+        for line in file:
+            # Split the line into columns based on the delimiter
+            columns = line.strip().split('\t')
+        
+            # Check if there is a second column (index 1)
+            if len(columns) > 1:
+                # Extract the value from the second column and append it to the list
+                center_time_values.append(columns[1])
+    #print(center_time_values)
+    return center_time_values
 
 
 if __name__ == '__main__':
